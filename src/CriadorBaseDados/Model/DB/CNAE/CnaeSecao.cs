@@ -6,12 +6,15 @@ using System.Text;
 
 namespace CriadorBaseDados.Model.DB.CNAE
 {
+    /// <summary>
+    /// Seção -> Divisão -> Grupo -> Classe -> Subclasse -> Atividade Econômica
+    /// </summary>
     public class CnaeSecao : RealmObject
     {
         [PrimaryKey]
-        public int ID { get; set; }
+        public string ID { get; set; }
         public string Descricao { get; set; }
-        public IList<string> Observacoes { get;}
+        //public string Observacoes { get; set; }
         [Backlink(nameof(CnaeDivisao.Secao))]
         public IQueryable<CnaeDivisao> Divisoes { get; }
     }

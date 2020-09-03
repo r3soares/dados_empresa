@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CriadorBaseDados.Builders;
+using System;
 
 namespace CriadorBaseDados
 {
@@ -7,7 +8,7 @@ namespace CriadorBaseDados
         static string NOME_DATABASE = "database_full";
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            //BuilderCNAE.Builder(null);
         }
     }
 }

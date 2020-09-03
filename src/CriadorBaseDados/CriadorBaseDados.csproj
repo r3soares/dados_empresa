@@ -10,6 +10,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Arquivos\cnae.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Arquivos\motivo_situacao_cadastral.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Arquivos\qualificacao_responsavel.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
