@@ -26,6 +26,8 @@ namespace CriadorBaseDados.Builders
             };
             serializeOptions.Converters.Add(new Int32Converter());
             List<CnaeSubclasse> subclasses = JsonSerializer.Deserialize<List<CnaeSubclasse>>(jsonstring, serializeOptions);
+            if (banco.All<CnaeSubclasse>().Count() == subclasses.Count)
+                return;
             var porSecao = subclasses.GroupBy(x => x.Classe.Grupo.Divisao.Secao.ID)
                 .Select(y => y.First())
                 .Select(z => z.Classe.Grupo.Divisao.Secao)
