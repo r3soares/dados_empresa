@@ -7,12 +7,8 @@ namespace CriadorBaseDados.Model.DB
 {
     public class Telefone : RealmObject
     {
-        /// <summary>
-        /// Com DDD
-        /// </summary>
         [PrimaryKey]
-        public int Numero { get; set; }
+        public string Numero { get; set; }     
         public bool IsFax { get; set; }
-        public Contato Contato { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace CriadorBaseDados.Builders
 {
-    public class BuilderSituacaoCadastral
+    public static class BuilderSituacaoCadastral
     {
         static public void Builder(Realm banco)
         {

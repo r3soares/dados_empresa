@@ -8,9 +8,9 @@ using System.Text;
 
 namespace CriadorBaseDados.Builders
 {
-    public class BuilderMotivoSituacaoCadastral
+    public static class BuilderMotivoSituacaoCadastral
     {
-        static string ARQUIVO = "Arquivos/motivo_situacao_cadastral.txt";
+        const string ARQUIVO = "Arquivos/motivo_situacao_cadastral.txt";
         static public void Builder(Realm banco)
         {
             if (banco.All<MotivoSituacao>().Count() > 0)

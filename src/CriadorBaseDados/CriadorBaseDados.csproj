@@ -6,7 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="linq2db" Version="3.1.1" />
+    <PackageReference Include="linq2db.SQLite" Version="3.1.1" />
     <PackageReference Include="Realm" Version="4.3.0" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.113.1" />
+    <PackageReference Include="System.Text.Json" Version="5.0.0-preview.8.20407.11" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,7 +20,13 @@
     <None Update="Arquivos\motivo_situacao_cadastral.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Arquivos\natureza_juridica.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Arquivos\qualificacao_responsavel.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Arquivos\selecao_dados_realm.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

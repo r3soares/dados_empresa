@@ -21,9 +21,10 @@ namespace CriadorBaseDados.Model.DB
         public int DataInicioAtividade { get; set; }
         public CnaeSubclasse CNAE_Fiscal { get; set; }
         public Endereco Endereco { get; set; }
+        public Municipio Municipio { get; set; }
         public Contato Contato { get; set; }
         public PorteEmpresa Porte { get; set; }
-        public float CapitalSocial { get; set; }
+        public double CapitalSocial { get; set; }
         [Backlink(nameof(SocioEmpresa.Empresa))]
         public IQueryable<SocioEmpresa> SociosEmpresa { get;}
 

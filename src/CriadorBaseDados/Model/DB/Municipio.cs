@@ -1,6 +1,7 @@
 ﻿using Realms;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CriadorBaseDados.Model.DB
@@ -10,6 +11,8 @@ namespace CriadorBaseDados.Model.DB
         [PrimaryKey]
         public int ID { get; set; }
         public string Nome { get; set; }
-        public string UF { get; set; }
+        public Estado UF { get; set; }
+        [Backlink(nameof(Empresa.Municipio))]
+        public IQueryable<Empresa> Empresas { get;}
     }
 }

@@ -8,11 +8,11 @@ namespace CriadorBaseDados.Model.DB
 {
     public class Socio : RealmObject
     {
-        [PrimaryKey]
-        public string ID { get; set; }
         [Backlink(nameof(SocioEmpresa.Socio))]
         public IQueryable<SocioEmpresa> SocioEmpresas { get;}
+        [Indexed]
         public string Nome { get; set; }
+        [Indexed]
         public string CNPJ_CPF { get; set; }
         public TipoSocio Tipo { get; set; }
     }

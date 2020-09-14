@@ -13,9 +13,9 @@ using System.Text.Json.Serialization;
 
 namespace CriadorBaseDados.Builders
 {
-    public class BuilderCNAE
+    public static class BuilderCNAE
     {
-        static string ARQUIVO = "Arquivos/cnae.json";
+        const string ARQUIVO = "Arquivos/cnae.json";
         static public void Builder(Realm banco)
         {
             var jsonstring = File.ReadAllText(ARQUIVO);
@@ -28,25 +28,22 @@ namespace CriadorBaseDados.Builders
             List<CnaeSubclasse> subclasses = JsonSerializer.Deserialize<List<CnaeSubclasse>>(jsonstring, serializeOptions);
             if (banco.All<CnaeSubclasse>().Count() == subclasses.Count)
                 return;
-            var porSecao = subclasses.GroupBy(x => x.Classe.Grupo.Divisao.Secao.ID)
-                .Select(y => y.First())
-                .Select(z => z.Classe.Grupo.Divisao.Secao)
-                .OrderBy(x => x.ID);
-            var porDivisao = subclasses.GroupBy(x => x.Classe.Grupo.Divisao.ID)
-                .Select(y => y.First())
-                .Select(z => z.Classe.Grupo.Divisao)
-                .OrderBy(x => x.ID);
-            var porGrupo = subclasses.GroupBy(x => x.Classe.Grupo.ID)
-                .Select(y => y.First())
-                .Select(z => z.Classe.Grupo)
-                .OrderBy(x => x.ID);
-            var porClasse = subclasses.GroupBy(x => x.Classe.ID)
-                .Select(y => y.First())
-                .Select(z => z.Classe)
-                .OrderBy(x => x.ID);
-            //Teste
-            var config = new InMemoryConfiguration("temp");
-            banco = Realm.GetInstance(config);
+            //var porSecao = subclasses.GroupBy(x => x.Classe.Grupo.Divisao.Secao.ID)
+            //    .Select(y => y.First())
+            //    .Select(z => z.Classe.Grupo.Divisao.Secao)
+            //    .OrderBy(x => x.ID);
+            //var porDivisao = subclasses.GroupBy(x => x.Classe.Grupo.Divisao.ID)
+            //    .Select(y => y.First())
+            //    .Select(z => z.Classe.Grupo.Divisao)
+            //    .OrderBy(x => x.ID);
+            //var porGrupo = subclasses.GroupBy(x => x.Classe.Grupo.ID)
+            //    .Select(y => y.First())
+            //    .Select(z => z.Classe.Grupo)
+            //    .OrderBy(x => x.ID);
+            //var porClasse = subclasses.GroupBy(x => x.Classe.ID)
+            //    .Select(y => y.First())
+            //    .Select(z => z.Classe)
+            //    .OrderBy(x => x.ID);
 
             banco.Write(() =>
             {

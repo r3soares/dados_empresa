@@ -9,9 +9,9 @@ using System.Text;
 
 namespace CriadorBaseDados.Builders
 {
-    public class BuilderNaturezaJuridica
+    public static class BuilderNaturezaJuridica
     {
-        static string ARQUIVO = "Arquivos/natureza_juridica.txt";
+        const string ARQUIVO = "Arquivos/natureza_juridica.txt";
         static public void Builder(Realm banco)
         {
             if (banco.All<NaturezaJuridica>().Count() > 0)

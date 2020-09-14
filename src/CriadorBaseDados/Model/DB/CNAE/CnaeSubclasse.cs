@@ -1,6 +1,7 @@
 ﻿using Realms;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CriadorBaseDados.Model.DB.CNAE
@@ -12,9 +13,11 @@ namespace CriadorBaseDados.Model.DB.CNAE
     {
         [PrimaryKey]
         public int ID { get; set; }
+        [Indexed]
         public string Descricao { get; set; }
-        //public IList<string> Observacoes { get;}
-        //public IList<string> Atividades { get;}
         public CnaeClasse Classe { get; set; }
+
+        [Backlink(nameof(Empresa.CNAE_Fiscal))]
+        public IQueryable<Empresa> Empresas { get;}
     }
 }

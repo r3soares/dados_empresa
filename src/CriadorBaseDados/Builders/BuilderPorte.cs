@@ -7,7 +7,7 @@ using System.Text;
 
 namespace CriadorBaseDados.Builders
 {
-    public class BuilderPorte
+    public static class BuilderPorte
     {
         static public void Builder(Realm banco)
         {
