@@ -1,4 +1,5 @@
 ﻿using CriadorBaseDados.Model.DB;
+using Newtonsoft.Json;
 using Realms;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,10 @@ namespace CriadorBaseDados.ImportersRealm
     public class ImportParcial
     {
         const string ARQUIVO = "Arquivos/selecao_dados_realm.txt";
-        const string NOME_DATABASE_PARCIAL = @"DatabasesRealm\";
+        const string PASTA_ESTADOS = @"DatabasesRealm\Estados\";
+        private string[] estados = new string[] { "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", 
+                                                  "MA", "MT", "MS", "MG", "PA", "PB", "PE", "PI", "PR", 
+                                                  "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO", };
         public void IniciaImport(Realm banco)
         {
             if (!File.Exists(ARQUIVO))
@@ -23,19 +27,16 @@ namespace CriadorBaseDados.ImportersRealm
                 Environment.Exit(0);
                 return;
             }
-            string[] dados = File.ReadAllLines(ARQUIVO);
-            List<string> estados = new List<string>(dados[0].ToUpper().Split(';'));
-            List<string> cnaes = new List<string>(dados[1].Split(';'));
-            Console.WriteLine("Estados selecionados:");
-            Console.WriteLine(dados[0].Replace(';', ' '));
+            string dados = File.ReadAllText(ARQUIVO);
+            List<string> cnaes = new List<string>(dados.Split(';'));
             Console.WriteLine("Filtros CNAEs selecionados:");
-            Console.WriteLine(dados[1]
+            Console.WriteLine(dados
                 .Replace("s", "Seção ")
                 .Replace("d", "Divisão ")
                 .Replace("g", "Grupo ")
                 .Replace("c", "Classe ")
                 .Replace(';', '\n'));
-            Console.WriteLine("Confirma estados e filtros? (s/n)");
+            Console.WriteLine("Confirma filtros? (s/n)");
             char opcao = Console.ReadKey().KeyChar;
             switch (opcao)
             {
@@ -50,20 +51,15 @@ namespace CriadorBaseDados.ImportersRealm
                     foreach(var estado in estados)
                     {                        
                         var estadoAtual = ir.ImportEstado(estado, banco);
-                        Realm baseEstado = Realm.GetInstance(NOME_DATABASE_PARCIAL + estadoAtual.UF + ".realm");
+                        Realm baseEstado = Realm.GetInstance(PASTA_ESTADOS + estadoAtual.UF + ".realm");
                         foreach (var municipio in estadoAtual.Municipios)
                         {
                             foreach(var empresa in municipio.Empresas)
                             {
-                                if (empresa.CNAE_Fiscal == null)
-                                    continue;
-                                if(cnaesSelecionados.ContainsKey(empresa.CNAE_Fiscal.ID))
+                                empresas.Add(empresa);
+                                if (empresas.Count > 500000)
                                 {
-                                    empresas.Add(empresa);
-                                    if(empresas.Count > 500000)
-                                    {
-                                        SalvaEmpresa(empresas, baseEstado);
-                                    }
+                                    SalvaEmpresa(empresas, baseEstado);
                                 }
                             }
                         }
@@ -84,15 +80,18 @@ namespace CriadorBaseDados.ImportersRealm
         {            
             baseDados.Write(() =>
             {
-                var options = new JsonSerializerOptions
-                {
-                    ReferenceHandler = ReferenceHandler.Preserve
-                };
+                //var options = new JsonSerializerSettings
+                //{
+                //    PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                //};
                 foreach (var e in empresas)
                 {
-                    var json = JsonSerializer.Serialize(e,options);
-                    Empresa e2 = JsonSerializer.Deserialize<Empresa>(json,options);
-                    baseDados.Add(e2);
+                    //var json = JsonSerializer.Serialize(e,options);
+                    //Empresa e2 = JsonSerializer.Deserialize<Empresa>(json,options);
+                    //var json = JsonConvert.SerializeObject(e, options);
+                    //Empresa e2 = JsonConvert.DeserializeObject<Empresa>(json,options);
+                    baseDados.Add(e);
                 }
             });
             empresas.Clear();

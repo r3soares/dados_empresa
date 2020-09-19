@@ -76,10 +76,5 @@ namespace CriadorBaseDados.ImportersRealm
 
             return subclasses;
         }
-
-        public void GetEmpresasNoCnae(IQueryable<Empresa> empresas, IDictionary<int,CnaeSubclasse> cnae)
-        {
-
-        }
     }
 }

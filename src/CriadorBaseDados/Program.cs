@@ -5,6 +5,7 @@ using CriadorBaseDados.Model.DB;
 using CriadorBaseDados.Model.DB.CNAE;
 using Realms;
 using System;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 
@@ -12,27 +13,29 @@ namespace CriadorBaseDados
 {
     class Program
     {
-        const string NOME_DATABASE = @"DatabasesRealm\database_full";
-        
+        static string NOME_DATABASE = @"E:\Projetos\CNPJ-full\DatabasesRealm\database_";
+
         static void Main()
         {
-            Console.WriteLine("Informe a opção desejada:");
-            Console.WriteLine("1 - Importação\n2 - Criar base de dados parciais");
-            char opcao = Console.ReadKey().KeyChar;
-            switch (opcao)
-            {
-                case '1':
-                    Importar();
-                    break;
-                case '2':
-                    CriaBaseParcial();
-                    break;
-            }
+            //Console.WriteLine("Informe a opção desejada:");
+            //Console.WriteLine("1 - Importação\n2 - Criar base de dados parciais");
+            //char opcao = Console.ReadKey().KeyChar;
+            //switch (opcao)
+            //{
+            //    case '1':
+            //        Importar();
+            //        break;
+            //    case '2':
+            //        CriaBaseParcial();
+            //        break;
+            //}
+            Importar();
             
         }
 
         static void Importar()
         {
+            Directory.CreateDirectory(@"E:\Projetos\CNPJ-full\DatabasesRealm");
             Realm realm = Realm.GetInstance(NOME_DATABASE + ".realm");
             if (realm.All<CnaeSubclasse>().Count() == 0 || realm.All<TipoSocio>().Count() == 0)
             {
@@ -44,17 +47,12 @@ namespace CriadorBaseDados
                 BuilderSituacaoCadastral.Builder(realm);
                 BuilderTipoSocio.Builder(realm);
             }
-            ImportersSQLite.Import.Importar(realm);
+            new Import().Importar(realm);
         }
 
         static void CriaBaseParcial()
         {
-            RealmConfiguration tmp = new RealmConfiguration
-            {
-                IsReadOnly = true
-            };
-            var config = tmp.ConfigWithPath(NOME_DATABASE + ".realm");
-            Realm realm = Realm.GetInstance(config);
+            Realm realm = Realm.GetInstance(NOME_DATABASE + ".realm");
             ImportParcial ip = new ImportParcial();
             ip.IniciaImport(realm);
 
