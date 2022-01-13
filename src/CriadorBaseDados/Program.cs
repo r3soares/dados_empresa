@@ -5,6 +5,7 @@ using CriadorBaseDados.Model.DB;
 using CriadorBaseDados.Model.DB.CNAE;
 using Realms;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
