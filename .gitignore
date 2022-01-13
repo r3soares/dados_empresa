@@ -9,9 +9,12 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.realm
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+*.realm
+*.realm.*
 
 # Mono auto generated files
 mono_crash.*

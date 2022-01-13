@@ -13,7 +13,7 @@ namespace CriadorBaseDados.Builders
         const string ARQUIVO = "Arquivos/qualificacao_responsavel.txt";
         static public void Builder(Realm banco)
         {
-            if (banco.All<QualificacaoResponsavel>().Count() > 0)
+            if (banco.All<QualificacaoResponsavel>().Any())
                 return;
             if(!File.Exists(ARQUIVO))
             {
@@ -22,11 +22,11 @@ namespace CriadorBaseDados.Builders
                 Environment.Exit(0);
                 return;
             }
-            List<QualificacaoResponsavel> lista = new List<QualificacaoResponsavel>();
+            List<QualificacaoResponsavel> lista = new();
             foreach(string linha in File.ReadAllLines(ARQUIVO))
             {
                 string[] codDesc = linha.Split(';');
-                QualificacaoResponsavel qr = new QualificacaoResponsavel()
+                QualificacaoResponsavel qr = new()
                 {
                     Cod = int.Parse(codDesc[0]),
                     Descricao = codDesc[1]

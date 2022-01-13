@@ -13,7 +13,7 @@ namespace CriadorBaseDados.Builders
         const string ARQUIVO = "Arquivos/motivo_situacao_cadastral.txt";
         static public void Builder(Realm banco)
         {
-            if (banco.All<MotivoSituacao>().Count() > 0)
+            if (banco.All<MotivoSituacao>().Any())
                 return;
             if (!File.Exists(ARQUIVO))
             {
@@ -22,11 +22,11 @@ namespace CriadorBaseDados.Builders
                 Environment.Exit(0);
                 return;
             }
-            List<MotivoSituacao> lista = new List<MotivoSituacao>();
+            List<MotivoSituacao> lista = new();
             foreach (string linha in File.ReadAllLines(ARQUIVO))
             {
                 string[] codDesc = linha.Split(';');
-                MotivoSituacao qr = new MotivoSituacao()
+                MotivoSituacao qr = new()
                 {
                     Cod = int.Parse(codDesc[0]),
                     Descricao = codDesc[1]

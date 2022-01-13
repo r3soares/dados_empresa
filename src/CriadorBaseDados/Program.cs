@@ -13,31 +13,62 @@ namespace CriadorBaseDados
 {
     class Program
     {
-        static string NOME_DATABASE = @"E:\Projetos\CNPJ-full\DatabasesRealm\database_";
+        static readonly string NOME_DATABASE = @"D:\Projetos\DadosEmpresa\base_realm\cnpj";
 
         static void Main()
         {
-            //Console.WriteLine("Informe a opção desejada:");
-            //Console.WriteLine("1 - Importação\n2 - Criar base de dados parciais");
-            //char opcao = Console.ReadKey().KeyChar;
-            //switch (opcao)
-            //{
-            //    case '1':
-            //        Importar();
-            //        break;
-            //    case '2':
-            //        CriaBaseParcial();
-            //        break;
-            //}
-            Importar();
+            Console.WriteLine("Informe a opção desejada:");
+            Console.WriteLine("1 - Importação\n2 - Compactar\n3 - Deletar os Sem Contato");
+            char opcao = Console.ReadKey().KeyChar;
+            switch (opcao)
+            {
+                case '1':
+                    Importar();
+                    DeleteCNAESVazios();
+                    DeleteSemEmailTelefone();
+                    break;
+                case '2':
+                    Compactar();
+                    break;
+                case '3':
+                    DeleteSemEmailTelefone();
+                    break;
+                default:
+                    Console.WriteLine("\nOpcão inválida");
+                    break;
+
+            }
             
+        }
+
+        private static void DeleteSemEmailTelefone()
+        {
+            using (Realm realm = Realm.GetInstance(NOME_DATABASE + ".realm"))
+            {
+                List<Empresa> lista = new();
+                foreach (var e in realm.All<Empresa>())
+                {
+                    if(e.Contato == null || string.IsNullOrEmpty(e.Contato.Email) || e.Contato.Numeros.Count == 0)
+                    {
+                        lista.Add(e);
+                    }
+                }
+                realm.Write(() =>
+                {
+                    foreach (var c in lista)
+                        realm.Remove(c);
+                });
+            }
+            RealmConfiguration configuration = new(NOME_DATABASE + ".realm");
+            Realm.Compact(configuration);
         }
 
         static void Importar()
         {
-            Directory.CreateDirectory(@"E:\Projetos\CNPJ-full\DatabasesRealm");
+            Console.WriteLine("\nCriando CNAEs...");
+            //Directory.CreateDirectory(@"E:\Projetos\CNPJ-full\DatabasesRealm");
             Realm realm = Realm.GetInstance(NOME_DATABASE + ".realm");
-            if (realm.All<CnaeSubclasse>().Count() == 0 || realm.All<TipoSocio>().Count() == 0)
+            if (!realm.All<CnaeSubclasse>().Any() || !realm.All<TipoSocio>().Any())
             {
                 BuilderCNAE.Builder(realm);
                 BuilderMotivoSituacaoCadastral.Builder(realm);
@@ -50,10 +81,40 @@ namespace CriadorBaseDados
             new Import().Importar(realm);
         }
 
+        static void DeleteCNAESVazios()
+        {
+            using (Realm realm = Realm.GetInstance(NOME_DATABASE + ".realm"))
+            {
+                List<CnaeSubclasse> lista = new();
+                foreach (var cnae in realm.All<CnaeSubclasse>())
+                {
+                    if (!cnae.Empresas.Any())
+                    {
+                        lista.Add(cnae);
+                    }
+                }
+                realm.Write(() =>
+                {
+                    foreach (var c in lista)
+                        realm.Remove(c);
+                });
+            }
+            RealmConfiguration configuration = new(NOME_DATABASE + ".realm");
+            Realm.Compact(configuration);
+        }
+
+        static void Compactar()
+        {
+            Console.WriteLine("\nCompactando..");
+            RealmConfiguration configuration = new(NOME_DATABASE + ".realm");
+            Realm.Compact(configuration);
+            Console.WriteLine("\nCompactação finalizada");
+        }
+
         static void CriaBaseParcial()
         {
             Realm realm = Realm.GetInstance(NOME_DATABASE + ".realm");
-            ImportParcial ip = new ImportParcial();
+            ImportParcial ip = new();
             ip.IniciaImport(realm);
 
         }

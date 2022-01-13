@@ -15,7 +15,7 @@ namespace CriadorBaseDados.ImportersSQLite
     public class Import
     {
         const string LOCAL_ARQUIVO_FILTROS = @"Arquivos/selecao_dados_realm.txt";
-        const string LOCAL_ARQUIVO = @"E:\Projetos\DadosEmpresa\Estrutura\CNPJ_full.db";
+        const string LOCAL_ARQUIVO = @"D:\Projetos\DadosEmpresa\cnpj.db";
         const int ITENS_EM_MEMORIA_EMPRESAS = 1000000, ITENS_EM_MEMORIA_SOCIOS = 5000000;
         Dictionary<string, string> filtroCnaes;
         string[] estados;
@@ -34,11 +34,15 @@ namespace CriadorBaseDados.ImportersSQLite
 
         private void IniciaImportacaoSQL(Realm banco)
         {
-            SQLiteDataProvider dataProvider = new SQLiteDataProvider("SQLite.Classic");
+            Console.WriteLine("\nObtendo dados da base SQLite...");
+            SQLiteDataProvider dataProvider = new("SQLite.Classic");
             var contexto = new DataContext(dataProvider, "Data Source=" + LOCAL_ARQUIVO + ";Read Only=True;");
-            var empresas = contexto.GetTable<TabelaEmpresas>().Where(x=> estados.Contains(x.uf) && filtroCnaes.ContainsKey(x.cnae_fiscal));
+            var estabelecimentos = contexto.GetTable<TabelaEstabelecimentos>().Where(x=> estados.Contains(x.uf) && filtroCnaes.ContainsKey(x.cnae_fiscal));
+            var cnpj = estabelecimentos.Select(x => x.cnpj_basico).ToList();
+            var empresas = contexto.GetTable<TabelaEmpresas>().Where(x => cnpj.Contains(x.cnpj_basico));
             var socios = contexto.GetTable<TabelaSocios>();
-            Console.WriteLine("Iniciando Importação...");
+            Console.WriteLine("\nIniciando Importação...");
+            //Console.WriteLine(estabelecimentos.Count().ToString("N") + " estabelecimentos para importar");
             Console.WriteLine(empresas.Count().ToString("N") + " empresas para importar");
             Console.WriteLine(socios.Count().ToString("N") + " sócios para importar");
             Console.WriteLine("Informe a opção desejada:");
@@ -49,16 +53,17 @@ namespace CriadorBaseDados.ImportersSQLite
             switch (opcao)
             {
                 case '1':
-                    ImportaEmpresa(empresas, banco);
+                    ImportaEmpresa(estabelecimentos, empresas, banco);
                     ImportaSocio(socios, banco);
                     break;
                 case '2':
-                    ImportaEmpresa(empresas, banco);
+                    ImportaEmpresa(estabelecimentos, empresas, banco);
                     break;
                 case '3':
                     ImportaSocio(socios, banco);
                     break;
                 default:
+                    Console.WriteLine("Opção inválida");
                     return;
             }
 
@@ -72,7 +77,7 @@ namespace CriadorBaseDados.ImportersSQLite
         {
             if (!File.Exists(LOCAL_ARQUIVO_FILTROS))
             {
-                Console.WriteLine("Arquivo não localizado:\n" + LOCAL_ARQUIVO_FILTROS);
+                Console.WriteLine("\nArquivo não localizado:\n" + LOCAL_ARQUIVO_FILTROS);
                 Console.ReadLine();
                 Environment.Exit(0);
                 return;
@@ -80,8 +85,8 @@ namespace CriadorBaseDados.ImportersSQLite
             string[] dados = File.ReadAllLines(LOCAL_ARQUIVO_FILTROS);
             //Define os estados para seleção no banco
             estados = dados[0].Split(';');
-            List<string> cnaes = new List<string>(dados[1].Split(';'));
-            Console.WriteLine("Estados e filtros CNAEs selecionados:");
+            List<string> cnaes = new(dados[1].Split(';'));
+            Console.WriteLine("\nEstados e filtros CNAEs selecionados:");
             Console.WriteLine(dados[0].Replace(';', ' '));
             Console.WriteLine(dados[1]
                 .Replace("s", "Seção ")
@@ -102,7 +107,7 @@ namespace CriadorBaseDados.ImportersSQLite
                     filtroCnaes = ImportCNAEs(secoes, divisoes, grupos, classes, banco).ToDictionary(x => x, x => x);
                     break;
                 case 'n':
-                    Console.WriteLine("Altere o arquivo " + LOCAL_ARQUIVO_FILTROS);
+                    Console.WriteLine("\nAltere o arquivo " + LOCAL_ARQUIVO_FILTROS);
                     Console.WriteLine("... e reinicie o programa");
                     Console.Read();
                     Environment.Exit(0);
@@ -110,19 +115,24 @@ namespace CriadorBaseDados.ImportersSQLite
             }
         }
 
-        private void ImportaEmpresa(IQueryable<TabelaEmpresas> empresas, Realm banco)
+        private static void ImportaEmpresa(IQueryable<TabelaEstabelecimentos> estabelecimentos, IQueryable<TabelaEmpresas> empresas, Realm banco)
         {
             Console.WriteLine("\nImportando Empresas...");
             double i = 0;
-            int qtd = empresas.Count();
+            int qtd = estabelecimentos.Count();
+            var mapEmpresas = empresas.ToDictionary(x=> x.cnpj_basico, x => x);
             var tempo = new Stopwatch();
             tempo.Start();
-            foreach (var t in empresas)
+            foreach (var t in estabelecimentos)
             {
                 i++;
                 //if (banco.Find<Empresa>(t.cnpj) != null)
                 //    continue;
-                EmpresaImport.Import(t, banco);
+                if(!mapEmpresas.TryGetValue(t.cnpj_basico, out TabelaEmpresas e))
+                {
+                    continue;
+                }
+                EmpresaImport.Import(t,e, banco);
                 if (EmpresaImport.listaEmpresas.Count > ITENS_EM_MEMORIA_EMPRESAS)
                 {
                     EmpresaImport.Salva(banco);
@@ -139,7 +149,7 @@ namespace CriadorBaseDados.ImportersSQLite
             tempo.Stop();
             Console.WriteLine("Importação de Empresas Finalizada em " + ((tempo.ElapsedMilliseconds / 1000) /60).ToString("N") + " minutos");
         }
-        private void ImportaSocio(ITable<TabelaSocios> socios, Realm banco)
+        private static void ImportaSocio(ITable<TabelaSocios> socios, Realm banco)
         {
             Console.WriteLine("\nImportando Sócios...");
             double i = 0;
@@ -169,9 +179,9 @@ namespace CriadorBaseDados.ImportersSQLite
             tempo.Stop();
             Console.WriteLine("Importação de Sócios Finalizada em " + ((tempo.ElapsedMilliseconds / 1000) / 60).ToString("N") + " minutos");
         }
-        public List<string> ImportCNAEs(string[] secoes, int[] divisoes, int[] grupos, int[] classes, Realm baseCompleta)
+        public static List<string> ImportCNAEs(string[] secoes, int[] divisoes, int[] grupos, int[] classes, Realm baseCompleta)
         {
-            List<string> subclasses = new List<string>();
+            List<string> subclasses = new();
             foreach (var s in secoes)
             {
                 var temp = baseCompleta.Find<CnaeSecao>(s);
@@ -232,9 +242,9 @@ namespace CriadorBaseDados.ImportersSQLite
             return subclasses;
         }
 
-        private int[] RemoveLetraInt(string[] grupo, string letra)
+        private static int[] RemoveLetraInt(string[] grupo, string letra)
         {
-            List<int> grupoInteiros = new List<int>();
+            List<int> grupoInteiros = new();
             foreach (var texto in grupo)
             {
                 var numeroTexto = texto.Replace(letra, "");
@@ -242,9 +252,9 @@ namespace CriadorBaseDados.ImportersSQLite
             }
             return grupoInteiros.ToArray();
         }
-        private string[] RemoveLetraString(string[] grupo, string letra)
+        private static string[] RemoveLetraString(string[] grupo, string letra)
         {
-            List<string> grupoStrings = new List<string>();
+            List<string> grupoStrings = new();
             foreach (var texto in grupo)
             {
                 grupoStrings.Add(texto.Replace(letra, ""));

@@ -11,10 +11,10 @@ namespace CriadorBaseDados.Builders
     {
         static public void Builder(Realm banco)
         {
-            if (banco.All<SituacaoCadastral>().Count() > 0)
+            if (banco.All<SituacaoCadastral>().Any())
                 return;
 
-            List<SituacaoCadastral> lista = new List<SituacaoCadastral>()
+            List<SituacaoCadastral> lista = new()
             {
                 new SituacaoCadastral(){Cod = 1, Descricao = "Nula"},
                 new SituacaoCadastral(){Cod = 2, Descricao = "Ativa"},

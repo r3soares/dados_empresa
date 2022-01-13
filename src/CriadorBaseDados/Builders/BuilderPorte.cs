@@ -11,10 +11,10 @@ namespace CriadorBaseDados.Builders
     {
         static public void Builder(Realm banco)
         {
-            if (banco.All<PorteEmpresa>().Count() > 0)
+            if (banco.All<PorteEmpresa>().Any())
                 return;
 
-            List<PorteEmpresa> lista = new List<PorteEmpresa>()
+            List<PorteEmpresa> lista = new()
             {
                 new PorteEmpresa(){Cod = 0, Descricao = "Não Informado"},
                 new PorteEmpresa(){Cod = 1, Descricao = "Micro Empresa"},

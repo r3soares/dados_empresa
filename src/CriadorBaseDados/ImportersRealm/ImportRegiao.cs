@@ -10,13 +10,13 @@ namespace CriadorBaseDados.ImportersRealm
 {
     public class ImportRegiao
     {
-        public Estado ImportEstado(string uf, Realm baseCompleta)
+        public static Estado ImportEstado(string uf, Realm baseCompleta)
         {
             return baseCompleta.Find<Estado>(uf);
         }
-        public List<int> ImportCNAEs(string[] secoes, int[] divisoes, int[] grupos, int[] classes, Realm baseCompleta)
+        public static List<int> ImportCNAEs(string[] secoes, int[] divisoes, int[] grupos, int[] classes, Realm baseCompleta)
         {
-            List<int> subclasses = new List<int>();
+            List<int> subclasses = new();
             foreach (var s in secoes)
             {
                 var temp = baseCompleta.Find<CnaeSecao>(s);

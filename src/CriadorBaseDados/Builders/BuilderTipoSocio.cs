@@ -11,10 +11,10 @@ namespace CriadorBaseDados.Builders
     {
         static public void Builder(Realm banco)
         {
-            if (banco.All<TipoSocio>().Count() > 0)
+            if (banco.All<TipoSocio>().Any())
                 return;
 
-            List<TipoSocio> lista = new List<TipoSocio>()
+            List<TipoSocio> lista = new()
             {
                 new TipoSocio(){Cod = 1, Descricao = "Jurídica"},
                 new TipoSocio(){Cod = 2, Descricao = "Física"},

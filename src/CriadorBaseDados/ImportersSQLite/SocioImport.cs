@@ -9,8 +9,8 @@ namespace CriadorBaseDados.ImportersSQLite
 {
     public static class SocioImport
     {
-        static readonly public Dictionary<string, Socio> listaSocios = new Dictionary<string, Socio>();
-        static readonly public List<SocioEmpresa> listaSociosEmpresas = new List<SocioEmpresa>();
+        static readonly public Dictionary<string, Socio> listaSocios = new();
+        static readonly public List<SocioEmpresa> listaSociosEmpresas = new();
         static public void Import(TabelaSocios tabela, Realm banco)
         {
             Empresa e = banco.Find<Empresa>(tabela.cnpj);
@@ -24,17 +24,17 @@ namespace CriadorBaseDados.ImportersSQLite
                 s = new Socio
                 {
                     CNPJ_CPF = tabela.cnpj_cpf_socio,
-                    Tipo = banco.Find<TipoSocio>(ToInt(tabela.tipo_socio)),
+                    Tipo = banco.Find<TipoSocio>(ToInt(tabela.identificador_de_socio)),
                     Nome = tabela.nome_socio
                 };
                 listaSocios.Add(busca, s);
             }
-            SocioEmpresa se = new SocioEmpresa
+            SocioEmpresa se = new()
             {
-                Capital = ToDouble(tabela.perc_capital),
-                DataEntrada = ToInt(tabela.data_entrada),
+                Capital = e.CapitalSocial,
+                DataEntrada = ToInt(tabela.data_entrada_sociedade),
                 Empresa = e,
-                Qualificacao = banco.Find<QualificacaoResponsavel>(ToInt(tabela.cod_qualificacao)),
+                Qualificacao = banco.Find<QualificacaoResponsavel>(ToInt(tabela.qualificacao_socio)),
                 Socio = s
             };
             listaSociosEmpresas.Add(se);            

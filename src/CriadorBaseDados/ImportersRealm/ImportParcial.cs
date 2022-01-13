@@ -1,5 +1,4 @@
 ﻿using CriadorBaseDados.Model.DB;
-using Newtonsoft.Json;
 using Realms;
 using System;
 using System.Collections.Generic;
@@ -15,7 +14,7 @@ namespace CriadorBaseDados.ImportersRealm
     {
         const string ARQUIVO = "Arquivos/selecao_dados_realm.txt";
         const string PASTA_ESTADOS = @"DatabasesRealm\Estados\";
-        private string[] estados = new string[] { "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", 
+        private readonly string[] estados = new string[] { "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", 
                                                   "MA", "MT", "MS", "MG", "PA", "PB", "PE", "PI", "PR", 
                                                   "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO", };
         public void IniciaImport(Realm banco)
@@ -28,7 +27,7 @@ namespace CriadorBaseDados.ImportersRealm
                 return;
             }
             string dados = File.ReadAllText(ARQUIVO);
-            List<string> cnaes = new List<string>(dados.Split(';'));
+            List<string> cnaes = new(dados.Split(';'));
             Console.WriteLine("Filtros CNAEs selecionados:");
             Console.WriteLine(dados
                 .Replace("s", "Seção ")
@@ -45,12 +44,12 @@ namespace CriadorBaseDados.ImportersRealm
                     var divisoes = RemoveLetraInt(cnaes.Where(d => d.StartsWith("d")).ToArray(), "d");
                     var grupos = RemoveLetraInt(cnaes.Where(g => g.StartsWith("g")).ToArray(), "g");
                     var classes = RemoveLetraInt(cnaes.Where(c => c.StartsWith("c")).ToArray(), "c");
-                    ImportRegiao ir = new ImportRegiao();
-                    var cnaesSelecionados = ir.ImportCNAEs(secoes, divisoes, grupos, classes, banco).ToDictionary(x=>x,x=>x);
-                    List<Empresa> empresas = new List<Empresa>();
+                    ImportRegiao ir = new();
+                    var cnaesSelecionados = ImportRegiao.ImportCNAEs(secoes, divisoes, grupos, classes, banco).ToDictionary(x=>x,x=>x);
+                    List<Empresa> empresas = new();
                     foreach(var estado in estados)
                     {                        
-                        var estadoAtual = ir.ImportEstado(estado, banco);
+                        var estadoAtual = ImportRegiao.ImportEstado(estado, banco);
                         Realm baseEstado = Realm.GetInstance(PASTA_ESTADOS + estadoAtual.UF + ".realm");
                         foreach (var municipio in estadoAtual.Municipios)
                         {
@@ -76,7 +75,7 @@ namespace CriadorBaseDados.ImportersRealm
             }
         }
 
-        private void SalvaEmpresa(List<Empresa> empresas, Realm baseDados)
+        private static void SalvaEmpresa(List<Empresa> empresas, Realm baseDados)
         {            
             baseDados.Write(() =>
             {
@@ -97,9 +96,9 @@ namespace CriadorBaseDados.ImportersRealm
             empresas.Clear();
         }
 
-        private int[] RemoveLetraInt(string[] grupo, string letra)
+        private static int[] RemoveLetraInt(string[] grupo, string letra)
         {
-            List<int> grupoInteiros = new List<int>();
+            List<int> grupoInteiros = new();
             foreach(var texto in grupo)
             {
                 var numeroTexto = texto.Replace(letra, "");
@@ -107,9 +106,9 @@ namespace CriadorBaseDados.ImportersRealm
             }
             return grupoInteiros.ToArray();
         }
-        private string[] RemoveLetraString(string[] grupo, string letra)
+        private static string[] RemoveLetraString(string[] grupo, string letra)
         {
-            List<string> grupoStrings = new List<string>();
+            List<string> grupoStrings = new();
             foreach (var texto in grupo)
             {
                 grupoStrings.Add(texto.Replace(letra, ""));

@@ -14,7 +14,7 @@ namespace CriadorBaseDados.Builders
         const string ARQUIVO = "Arquivos/natureza_juridica.txt";
         static public void Builder(Realm banco)
         {
-            if (banco.All<NaturezaJuridica>().Count() > 0)
+            if (banco.All<NaturezaJuridica>().Any())
                 return;
             if (!File.Exists(ARQUIVO))
             {
@@ -24,8 +24,8 @@ namespace CriadorBaseDados.Builders
                 return;
             }
 
-            List<GrupoNaturezaJuridica> grupo = new List<GrupoNaturezaJuridica>();
-            List<NaturezaJuridica> natureza = new List<NaturezaJuridica>();
+            List<GrupoNaturezaJuridica> grupo = new();
+            List<NaturezaJuridica> natureza = new();
             bool isGrupo = true;
             int cod = 0;
             string desc = "";
@@ -42,7 +42,7 @@ namespace CriadorBaseDados.Builders
                 desc = codDesc[1];
                 if (isGrupo)
                 {                    
-                    GrupoNaturezaJuridica qr = new GrupoNaturezaJuridica()
+                    GrupoNaturezaJuridica qr = new()
                     {
                         Cod = cod,
                         Descricao = desc
@@ -51,12 +51,10 @@ namespace CriadorBaseDados.Builders
                 }
                 else
                 {
-                    NaturezaJuridica nj = new NaturezaJuridica()
+                    NaturezaJuridica nj = new()
                     {
                         Cod = cod,
                         Descricao = desc,
-                        //O primeiro digito corresponde ao grupo, por isso o mod por 1000
-                        //o resto será o primeiro digito
                         Grupo = grupo.First(g => g.Cod == cod / 1000)
                     };
                     natureza.Add(nj);

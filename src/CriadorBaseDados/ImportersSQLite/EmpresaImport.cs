@@ -10,32 +10,32 @@ namespace CriadorBaseDados.ImportersSQLite
 {
     public static class EmpresaImport
     {
-        static readonly public List<Empresa> listaEmpresas = new List<Empresa>();
-        static readonly public Dictionary<string,Telefone> listaTelefones = new Dictionary<string, Telefone>();
-        static readonly public Dictionary<int,Municipio> listaMunicipios = new Dictionary<int, Municipio>();
-        static readonly public Dictionary<string, Estado> listaEstados = new Dictionary<string, Estado>();
-        static public void Import(TabelaEmpresas tabela, Realm banco)
+        static readonly public List<Empresa> listaEmpresas = new();
+        static readonly public Dictionary<string,Telefone> listaTelefones = new();
+        static readonly public Dictionary<int,Municipio> listaMunicipios = new();
+        static readonly public Dictionary<string, Estado> listaEstados = new();
+        static public void Import(TabelaEstabelecimentos tabelaEstabelecimento, TabelaEmpresas tabelaEmpresa, Realm banco)
         {
-            int situacao = ToInt(tabela.situacao);
+            int situacao = ToInt(tabelaEstabelecimento.situacao_cadastral);
             if (situacao != 2)
                 return;
-            Empresa e = new Empresa
+            Empresa e = new()
             {
-                CNPJ = tabela.cnpj,
-                CapitalSocial = ToDouble(tabela.capital_social),
-                CNAE_Fiscal = banco.Find<CnaeSubclasse>(int.Parse(tabela.cnae_fiscal)),
-                Contato = CriaContato(tabela, banco),
-                DataInicioAtividade = ToInt(tabela.data_inicio_ativ),
-                DataSituacao = ToInt(tabela.data_situacao),
-                Endereco = CriaEndereco(tabela),
-                IsMatriz = tabela.matriz_filial.Equals("1"),
-                Motivo = banco.Find<MotivoSituacao>(ToInt(tabela.motivo_situacao)),
-                NaturezaJuridica = banco.Find<NaturezaJuridica>(ToInt(tabela.cod_nat_juridica)),
-                NomeFantasia = tabela.nome_fantasia,
-                Porte = banco.Find<PorteEmpresa>(ToInt(tabela.porte)),
-                RazaoSocial = tabela.razao_social,
+                CNPJ = tabelaEstabelecimento.cnpj,
+                CapitalSocial = ToDouble(tabelaEmpresa.capital_social),
+                CNAE_Fiscal = banco.Find<CnaeSubclasse>(int.Parse(tabelaEstabelecimento.cnae_fiscal)),
+                Contato = CriaContato(tabelaEstabelecimento, banco),
+                DataInicioAtividade = ToInt(tabelaEstabelecimento.data_inicio_atividades),
+                DataSituacao = ToInt(tabelaEstabelecimento.data_situacao_cadastral),
+                Endereco = CriaEndereco(tabelaEstabelecimento),
+                IsMatriz = tabelaEstabelecimento.matriz_filial.Equals("1"),
+                Motivo = banco.Find<MotivoSituacao>(ToInt(tabelaEstabelecimento.motivo_situacao_cadastral)),
+                NaturezaJuridica = banco.Find<NaturezaJuridica>(ToInt(tabelaEmpresa.natureza_juridica)),
+                NomeFantasia = tabelaEstabelecimento.nome_fantasia,
+                Porte = banco.Find<PorteEmpresa>(ToInt(tabelaEmpresa.porte_empresa)),
+                RazaoSocial = tabelaEmpresa.razao_social,
                 Situacao = banco.Find<SituacaoCadastral>(situacao),
-                Municipio = CriaPegaMunicipio(tabela, banco)
+                Municipio = CriaPegaMunicipio(tabelaEstabelecimento, banco)
             };
             listaEmpresas.Add(e);
         }
@@ -63,23 +63,23 @@ namespace CriadorBaseDados.ImportersSQLite
             listaMunicipios.Clear();
         }
 
-        static Contato CriaContato(TabelaEmpresas tabela, Realm banco)
+        static Contato CriaContato(TabelaEstabelecimentos tabela, Realm banco)
         {
             var c = new Contato
             {
-                Email = tabela.email,
+                Email = tabela.correio_eletronico,
             };
-            if (!string.IsNullOrEmpty(tabela.telefone_1))
+            if (!string.IsNullOrEmpty(tabela.telefone1))
             {
-                CriaSetTelefone(c, tabela.ddd_1, tabela.telefone_1, false, banco);
+                CriaSetTelefone(c, tabela.ddd1, tabela.telefone1, false, banco);
             }
-            if (!string.IsNullOrEmpty(tabela.telefone_2))
+            if (!string.IsNullOrEmpty(tabela.telefone2))
             {
-                CriaSetTelefone(c, tabela.ddd_2, tabela.telefone_2, false, banco);
+                CriaSetTelefone(c, tabela.ddd2, tabela.telefone2, false, banco);
             }
-            if (!string.IsNullOrEmpty(tabela.num_fax))
+            if (!string.IsNullOrEmpty(tabela.fax))
             {
-                CriaSetTelefone(c, tabela.ddd_fax, tabela.num_fax, true, banco);
+                CriaSetTelefone(c, tabela.ddd_fax, tabela.fax, true, banco);
             }
             return c;
         }
@@ -108,9 +108,9 @@ namespace CriadorBaseDados.ImportersSQLite
             }
         }
 
-        static private Endereco CriaEndereco(TabelaEmpresas tabela)
+        static private Endereco CriaEndereco(TabelaEstabelecimentos tabela)
         {
-            Endereco e = new Endereco
+            Endereco e = new()
             {
                 Bairro = tabela.bairro,
                 CEP = tabela.cep,
@@ -121,9 +121,9 @@ namespace CriadorBaseDados.ImportersSQLite
             return e;
         }
 
-        static private Municipio CriaPegaMunicipio(TabelaEmpresas tabela, Realm banco)
+        static private Municipio CriaPegaMunicipio(TabelaEstabelecimentos tabela, Realm banco)
         {
-            int id = ToInt(tabela.cod_municipio);
+            int id = ToInt(tabela.municipio);
             Municipio m = listaMunicipios.TryGetValue(id, out m) ? m : banco.Find<Municipio>(id);
             if (m == null)
             {
@@ -139,7 +139,7 @@ namespace CriadorBaseDados.ImportersSQLite
                 
         }
 
-        static private Estado CriaPegaEstado(TabelaEmpresas tabela, Realm banco)
+        static private Estado CriaPegaEstado(TabelaEstabelecimentos tabela, Realm banco)
         {
             listaEstados.TryGetValue(tabela.uf.ToUpper(), out Estado e);
             if(e == null)

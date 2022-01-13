@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BuscaEmpresaApp.Views.PesquisaPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:BuscaEmpresaApp.Views.Converters"
+    xmlns:vm="clr-namespace:BuscaEmpresaApp.ViewModels"
+    Title="{Binding Title}"
+    IsBusy="{Binding IsOcupado, Mode=TwoWay}">
+
+    <ContentPage.BindingContext>
+        <vm:PesquisaViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Accent">#96d1ff</Color>
+            <local:MaskConverter x:Key="toMask" />
+            <local:InvertBoolConverter x:Key="inverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="20" />
+        </Grid.RowDefinitions>
+        <Picker
+            Title="Estado"
+            ItemDisplayBinding="{Binding UF}"
+            ItemsSource="{Binding UFs}"
+            SelectedItem="{Binding EstadoSelecionado}" />
+        <Entry
+            Grid.Row="1"
+            HorizontalOptions="Fill"
+            Placeholder="Pesquisa"
+            Text="{Binding TermoPesquisa}" />
+        <Button
+            Grid.Row="2"
+            Command="{Binding PesquisarCommand}"
+            HorizontalOptions="CenterAndExpand"
+            IsVisible="{Binding IsOcupado, Converter={StaticResource inverter}}"
+            Text="Pesquisar" />
+        <Button
+            Grid.Row="2"
+            Command="{Binding CancelarCommand}"
+            HorizontalOptions="CenterAndExpand"
+            IsVisible="{Binding IsOcupado}"
+            Text="Cancelar" />
+
+        <CollectionView Grid.Row="3" ItemsSource="{Binding ResultadoPesquisa}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Orientation="Vertical">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="Medium"
+                            Text="{Binding RazaoSocial}" />
+                        <Label FontSize="Medium" Text="{Binding CNPJ, Converter={StaticResource toMask}, ConverterParameter='XX.XXX.XXX/XXXX-XX'}" />
+                        <Label
+                            FontSize="Small"
+                            Text="{Binding Contato.Email}"
+                            TextColor="BlueViolet" />
+                        <CollectionView
+                            HeightRequest="20"
+                            ItemsLayout="HorizontalList"
+                            ItemsSource="{Binding Contato.Numeros}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Label
+                                        Margin="10,0"
+                                        FontSize="Small"
+                                        Text="{Binding Numero, Converter={StaticResource toMask}, ConverterParameter='(XX) XXXX-XXXX'}"
+                                        TextColor="DarkGreen" />
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                        <BoxView
+                            HeightRequest="1"
+                            HorizontalOptions="FillAndExpand"
+                            Color="Black" />
+                    </StackLayout>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <StackLayout Grid.Row="4" Orientation="Horizontal">
+            <Label HorizontalOptions="Start" Text="{Binding ResultadoPesquisa.Count, StringFormat='Empresas: {0}'}" />
+            <ActivityIndicator
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsOcupado, Mode=TwoWay}"
+                Color="#ba000d" />
+        </StackLayout>
+
+    </Grid>
+
+</ContentPage>
