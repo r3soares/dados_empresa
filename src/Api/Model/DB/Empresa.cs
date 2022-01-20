@@ -42,7 +42,7 @@ namespace CriadorBaseDados.Model.DB
         public PorteEmpresa Porte { get; set; }
         [JsonProperty]
         public double CapitalSocial { get; set; }
-        [JsonProperty]
+        //[JsonProperty]
         [Backlink(nameof(SocioEmpresa.Empresa))]
         public IQueryable<SocioEmpresa> SociosEmpresa { get;}
 

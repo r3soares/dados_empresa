@@ -21,7 +21,7 @@ namespace CriadorBaseDados.Model.DB.CNAE
         [JsonProperty]
         public CnaeGrupo Grupo { get; set; }
         [Backlink(nameof(CnaeSubclasse.Classe))]
-        [JsonProperty]
+        //[JsonProperty]
         public IQueryable<CnaeSubclasse> Subclasses { get; }
     }
 }

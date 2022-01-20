@@ -22,7 +22,7 @@ namespace CriadorBaseDados.Model.DB
         public int Cod { get; set; }
         [JsonProperty]
         public string Descricao { get; set; }
-        [JsonProperty]
+        //[JsonProperty]
         [Backlink(nameof(NaturezaJuridica.Grupo))]
         public IQueryable<NaturezaJuridica> Lista { get; }
     }

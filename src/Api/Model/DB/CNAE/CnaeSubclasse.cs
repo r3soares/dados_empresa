@@ -22,7 +22,7 @@ namespace CriadorBaseDados.Model.DB.CNAE
         [JsonProperty]
         public CnaeClasse Classe { get; set; }
 
-        [JsonProperty]
+        //[JsonProperty]
         [Backlink(nameof(Empresa.CNAE_Fiscal))]
         public IQueryable<Empresa> Empresas { get;}
     }
