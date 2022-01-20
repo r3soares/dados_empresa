@@ -10,7 +10,7 @@ namespace CriadorBaseDados.Model.DB
     [JsonObject(MemberSerialization.OptIn)]
     public class Socio : RealmObject
     {
-        [JsonProperty]
+        //[JsonProperty]
         [Backlink(nameof(SocioEmpresa.Socio))]
         public IQueryable<SocioEmpresa> SocioEmpresas { get;}
         [JsonProperty]

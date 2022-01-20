@@ -13,7 +13,7 @@ namespace CriadorBaseDados.Model.DB
         [JsonProperty]
         [PrimaryKey]
         public string UF { get; set; }
-        [JsonProperty]
+        //[JsonProperty]
         [Backlink(nameof(Municipio.UF))]
         public IQueryable<Municipio> Municipios { get; }
     }

@@ -20,7 +20,7 @@ namespace CriadorBaseDados.Model.DB.CNAE
         public string Descricao { get; set; }
         [JsonProperty]
         public CnaeDivisao Divisao { get; set; }
-        [JsonProperty]
+        //[JsonProperty]
         [Backlink(nameof(CnaeClasse.Grupo))]
         public IQueryable<CnaeClasse> Classes { get; }
     }

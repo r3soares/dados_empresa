@@ -17,7 +17,7 @@ namespace CriadorBaseDados.Model.DB
         public string Nome { get; set; }
         [JsonProperty]
         public Estado UF { get; set; }
-        [JsonProperty]
+        //[JsonProperty]
         [Backlink(nameof(Empresa.Municipio))]
         public IQueryable<Empresa> Empresas { get;}
     }
