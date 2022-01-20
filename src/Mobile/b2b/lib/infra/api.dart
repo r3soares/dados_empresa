@@ -15,7 +15,8 @@ class Api implements IDatabase {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, DELETE, PUT, OPTIONS',
-    'Access-Control-Allow-Headers': 'X-Requested-With'
+    'Access-Control-Allow-Headers': 'X-Requested-With',
+    'Accept-Encoding': 'gzip',
   };
 
   Api(this.controller);
