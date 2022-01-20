@@ -8,23 +8,24 @@ namespace Api.Controllers
 {
     [Route("v1/[controller]")]
     [ApiController]
-    public class EstadosController : ControllerBase
+    public class EstadoController : ControllerBase
     {
         private readonly IRepository<Estado> _repo;
-        private readonly ILogger<EstadosController> _logger;
+        private readonly ILogger<EstadoController> _logger;
         //private readonly CultureInfo dataFormato = CultureInfo.GetCultureInfo("pt-BR");
 
-        public EstadosController(IRepository<Estado> repo, ILogger<EstadosController> logger)
+        public EstadoController(IRepository<Estado> repo, ILogger<EstadoController> logger)
         {
             _repo = repo;
             _logger = logger;
         }
 
+        //Obtém todos os municipios daquele estado
         [HttpGet("{uf}")]
-        public async Task<IActionResult> Get(string uf)
+        public async Task<IActionResult> GetMunicipios(string uf)
         {
             var t = await _repo.GetById(uf);
-            return t != null ? Ok(t) : NotFound();
+            return t != null ? Ok(t.Municipios) : NotFound();
         }
     }
 }
