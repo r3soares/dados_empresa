@@ -12,9 +12,11 @@ namespace src.Respositories.Infra.Databases.RealmDB
         
     {
         static bool isCompactado = false;
+        const string databaseName = "cnpj.realm";
+        const bool persist = true;
         private readonly RealmConfigurationBase _configuration;
         private async Task<Realm> Database() { return await Realm.GetInstanceAsync(_configuration); }
-        public RealmDatabase(string databaseName, bool persist = true)
+        public RealmDatabase()
         {
             string folder = Path.Combine(Directory.GetCurrentDirectory(), "Databases");
             string path = Path.Combine(folder, databaseName);
