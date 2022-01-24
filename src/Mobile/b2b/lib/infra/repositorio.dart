@@ -1,7 +1,7 @@
 import 'package:b2b/domain/erros.dart';
 import 'package:b2b/domain/log.dart';
-import 'package:b2b/infra/IDatabase.dart';
 import 'package:b2b/model/core/estado.dart';
+import 'package:b2b/utils/services/iDatabase.dart';
 
 class RepositoryTanque {
   final IDatabase db;
