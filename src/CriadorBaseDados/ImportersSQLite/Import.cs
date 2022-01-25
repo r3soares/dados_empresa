@@ -41,10 +41,11 @@ namespace CriadorBaseDados.ImportersSQLite
             var cnpj = estabelecimentos.Select(x => x.cnpj_basico).ToList();
             var empresas = contexto.GetTable<TabelaEmpresas>().Where(x => cnpj.Contains(x.cnpj_basico));
             var socios = contexto.GetTable<TabelaSocios>();
+            var municipios = contexto.GetTable<TabelaMunicipios>();
             Console.WriteLine("\nIniciando Importação...");
             //Console.WriteLine(estabelecimentos.Count().ToString("N") + " estabelecimentos para importar");
-            Console.WriteLine(empresas.Count().ToString("N") + " empresas para importar");
-            Console.WriteLine(socios.Count().ToString("N") + " sócios para importar");
+            //Console.WriteLine(empresas.Count().ToString("N") + " empresas para importar");
+           // Console.WriteLine(socios.Count().ToString("N") + " sócios para importar");
             Console.WriteLine("Informe a opção desejada:");
             Console.WriteLine("1 - Importação Completa\n2 - Empresas\n3 - Sócios");
             char opcao = Console.ReadKey().KeyChar;
@@ -53,11 +54,11 @@ namespace CriadorBaseDados.ImportersSQLite
             switch (opcao)
             {
                 case '1':
-                    ImportaEmpresa(estabelecimentos, empresas, banco);
+                    ImportaEmpresa(estabelecimentos, empresas, municipios, banco);
                     ImportaSocio(socios, banco);
                     break;
                 case '2':
-                    ImportaEmpresa(estabelecimentos, empresas, banco);
+                    ImportaEmpresa(estabelecimentos, empresas,municipios, banco);
                     break;
                 case '3':
                     ImportaSocio(socios, banco);
@@ -71,6 +72,7 @@ namespace CriadorBaseDados.ImportersSQLite
             Console.WriteLine("\nImportação Finalizada em " + ((tempo.ElapsedMilliseconds / 1000) / 60).ToString("N") + " minutos");
             Console.WriteLine("Enter para finalizar");
             Console.ReadLine();
+            Environment.Exit(0);
         }
 
         private void ImportFiltros(Realm banco)
@@ -115,12 +117,13 @@ namespace CriadorBaseDados.ImportersSQLite
             }
         }
 
-        private static void ImportaEmpresa(IQueryable<TabelaEstabelecimentos> estabelecimentos, IQueryable<TabelaEmpresas> empresas, Realm banco)
+        private static void ImportaEmpresa(IQueryable<TabelaEstabelecimentos> estabelecimentos, IQueryable<TabelaEmpresas> empresas, IQueryable<TabelaMunicipios> municipios, Realm banco)
         {
             Console.WriteLine("\nImportando Empresas...");
             double i = 0;
             int qtd = estabelecimentos.Count();
             var mapEmpresas = empresas.ToDictionary(x=> x.cnpj_basico, x => x);
+            var mapMunicipio = municipios.ToDictionary(x => int.Parse(x.codigo), x => x.descricao);
             var tempo = new Stopwatch();
             tempo.Start();
             foreach (var t in estabelecimentos)
@@ -132,7 +135,7 @@ namespace CriadorBaseDados.ImportersSQLite
                 {
                     continue;
                 }
-                EmpresaImport.Import(t,e, banco);
+                EmpresaImport.Import(t,e, mapMunicipio, banco);
                 if (EmpresaImport.listaEmpresas.Count > ITENS_EM_MEMORIA_EMPRESAS)
                 {
                     EmpresaImport.Salva(banco);
@@ -142,7 +145,7 @@ namespace CriadorBaseDados.ImportersSQLite
                     Console.WriteLine("Performance: " + itensPorSegundo.ToString("N") + " itens/segundo");
                 }
             }
-            if (EmpresaImport.listaEmpresas.Count > 0)
+            if (EmpresaImport.listaEmpresas.Any())
             {
                 EmpresaImport.Salva(banco);
             }
@@ -172,7 +175,7 @@ namespace CriadorBaseDados.ImportersSQLite
                     Console.WriteLine("Performance: " + itensPorSegundo.ToString("N") + " itens/segundo");
                 }
             }
-            if (SocioImport.listaSociosEmpresas.Count > 0 || SocioImport.listaSocios.Count > 0)
+            if (SocioImport.listaSociosEmpresas.Any() || SocioImport.listaSocios.Any())
             {
                 SocioImport.Salva(banco);
             }

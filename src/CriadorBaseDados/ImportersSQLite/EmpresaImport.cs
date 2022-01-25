@@ -14,7 +14,7 @@ namespace CriadorBaseDados.ImportersSQLite
         static readonly public Dictionary<string,Telefone> listaTelefones = new();
         static readonly public Dictionary<int,Municipio> listaMunicipios = new();
         static readonly public Dictionary<string, Estado> listaEstados = new();
-        static public void Import(TabelaEstabelecimentos tabelaEstabelecimento, TabelaEmpresas tabelaEmpresa, Realm banco)
+        static public void Import(TabelaEstabelecimentos tabelaEstabelecimento, TabelaEmpresas tabelaEmpresa, Dictionary<int,string> mapMunicipios, Realm banco)
         {
             int situacao = ToInt(tabelaEstabelecimento.situacao_cadastral);
             if (situacao != 2)
@@ -35,7 +35,7 @@ namespace CriadorBaseDados.ImportersSQLite
                 Porte = banco.Find<PorteEmpresa>(ToInt(tabelaEmpresa.porte_empresa)),
                 RazaoSocial = tabelaEmpresa.razao_social,
                 Situacao = banco.Find<SituacaoCadastral>(situacao),
-                Municipio = CriaPegaMunicipio(tabelaEstabelecimento, banco)
+                Municipio = CriaPegaMunicipio(tabelaEstabelecimento, mapMunicipios, banco)
             };
             listaEmpresas.Add(e);
         }
@@ -121,7 +121,7 @@ namespace CriadorBaseDados.ImportersSQLite
             return e;
         }
 
-        static private Municipio CriaPegaMunicipio(TabelaEstabelecimentos tabela, Realm banco)
+        static private Municipio CriaPegaMunicipio(TabelaEstabelecimentos tabela, Dictionary<int,string> mapMunicipios, Realm banco)
         {
             int id = ToInt(tabela.municipio);
             Municipio m = listaMunicipios.TryGetValue(id, out m) ? m : banco.Find<Municipio>(id);
@@ -130,7 +130,7 @@ namespace CriadorBaseDados.ImportersSQLite
                 m = new Municipio
                 {
                     ID = id,
-                    Nome = tabela.municipio,
+                    Nome = mapMunicipios[id],
                     UF = CriaPegaEstado(tabela, banco)
                 };
                 listaMunicipios.Add(id,m);
