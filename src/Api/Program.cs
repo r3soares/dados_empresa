@@ -11,7 +11,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddSingleton(typeof(IRepository<>), typeof(RealmDatabase<>));
-builder.Services.AddResponseCompression();
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+}
+);
 builder.Services.Configure<GzipCompressionProviderOptions>(options =>
 {
     options.Level = CompressionLevel.Optimal;
