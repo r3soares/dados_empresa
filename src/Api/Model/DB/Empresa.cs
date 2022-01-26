@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Realms;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -14,33 +15,46 @@ namespace CriadorBaseDados.Model.DB
         [JsonProperty]
         [PrimaryKey]
         public string CNPJ { get; set; }
-        [JsonProperty]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public bool IsMatriz { get; set; }
         [JsonProperty]
         public string RazaoSocial { get; set; }
-        [JsonProperty]
+        [DefaultValue("")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string NomeFantasia { get; set; }
+        [Ignored]
         [JsonProperty]
+        public int CodSituacao { get => Situacao.Cod; }
         public SituacaoCadastral Situacao { get; set; }
-        [JsonProperty]
+        [Ignored]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? CodMotivo { get => Motivo?.Cod; }
         public MotivoSituacao Motivo { get; set; }
         [JsonProperty]
         public int DataSituacao { get; set; }
-        [JsonProperty]
+        [Ignored]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? CodNaturezaJuridica { get => NaturezaJuridica?.Cod; }
         public NaturezaJuridica NaturezaJuridica { get; set; }
         [JsonProperty]
         public int DataInicioAtividade { get; set; }
+        [Ignored]
         [JsonProperty]
+        public int CodCNAE_Fiscal { get => CNAE_Fiscal.ID; }
         public CnaeSubclasse CNAE_Fiscal { get; set; }
         [JsonProperty]
         public Endereco Endereco { get; set; }
+        [Ignored]
         [JsonProperty]
+        public int CodMunicipio { get => Municipio.ID; }
         public Municipio Municipio { get; set; }
         [JsonProperty]
         public Contato Contato { get; set; }
+        [Ignored]
         [JsonProperty]
+        public int CodPorte { get => Porte.Cod; }
         public PorteEmpresa Porte { get; set; }
-        [JsonProperty]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public double CapitalSocial { get; set; }
         //[JsonProperty]
         [Backlink(nameof(SocioEmpresa.Empresa))]

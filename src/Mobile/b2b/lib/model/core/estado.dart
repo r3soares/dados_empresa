@@ -9,6 +9,6 @@ class Estado {
   Estado(this.uf, this.municipios);
 
   Estado.fromJson(Map<String, dynamic> json)
-      : uf = json['UF'],
-        municipios = json['Municipios'];
+      : uf = json['uf'],
+        municipios = json['municipios'];
 }

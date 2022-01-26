@@ -2,7 +2,6 @@ import 'cnae/cnae_subclasse.dart';
 import 'contato.dart';
 import 'endereco.dart';
 import 'motivo_situacao.dart';
-import 'municipio.dart';
 import 'natureza_juridica.dart';
 import 'porte_empresa.dart';
 import 'situacao_cadastral.dart';
@@ -20,7 +19,7 @@ class Empresa {
   final int dataInicioAtividade;
   final CnaeSubclasse cnaeFiscal;
   final Endereco endereco;
-  final Municipio municipio;
+  final int municipio;
   final Contato contato;
   final PorteEmpresa porte;
   final double capitalSocial;

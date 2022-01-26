@@ -11,7 +11,7 @@ namespace CriadorBaseDados.Model.DB
     {
         [JsonProperty]
         public Socio Socio { get; set; }
-        [JsonProperty]
+        //[JsonProperty]
         public Empresa Empresa { get; set; }
         [JsonProperty]
         public QualificacaoResponsavel Qualificacao { get; set; }

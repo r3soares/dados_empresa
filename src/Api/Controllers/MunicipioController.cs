@@ -22,7 +22,7 @@ namespace Api.Controllers
 
         //Obtém todas as empresas daquele Municipio
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetEmpresas(string id)
+        public async Task<IActionResult> GetEmpresas(int id)
         {
             var t = await _repo.GetById(id);
             return t != null ? Ok(t.Empresas) : NotFound();
