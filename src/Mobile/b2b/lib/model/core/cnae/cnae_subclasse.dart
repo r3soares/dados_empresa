@@ -7,8 +7,8 @@ import 'cnae_classe.dart';
 class CnaeSubclasse {
   final int id;
   final String descricao;
-  final CnaeClasse classe;
+  final int codClasse;
   final List<Empresa> empresas;
 
-  CnaeSubclasse(this.id, this.descricao, this.classe, this.empresas);
+  CnaeSubclasse(this.id, this.descricao, this.codClasse, this.empresas);
 }

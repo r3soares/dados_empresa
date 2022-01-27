@@ -19,7 +19,9 @@ namespace CriadorBaseDados.Model.DB
         [JsonProperty]
         [Indexed]
         public string CNPJ_CPF { get; set; }
+        [Ignored]
         [JsonProperty]
+        public int CodTipo => Tipo.Cod;
         public TipoSocio Tipo { get; set; }
     }
 }

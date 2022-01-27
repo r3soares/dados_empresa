@@ -7,9 +7,8 @@ import 'cnae_divisao.dart';
 class CnaeGrupo {
   final int id;
   final String descricao;
-  //final IList<String> Observacoes { get;}
-  final CnaeDivisao divisao;
+  final int codDivisao;
   final List<CnaeClasse> classes;
 
-  CnaeGrupo(this.id, this.descricao, this.divisao, this.classes);
+  CnaeGrupo(this.id, this.descricao, this.codDivisao, this.classes);
 }

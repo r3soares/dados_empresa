@@ -15,7 +15,7 @@ class Empresa {
   final int codCnaeFiscal;
   final Endereco endereco;
   final int municipio;
-  final Contato contato;
+  final Contato? contato;
   final int codPorte;
   final double capitalSocial;
   final List<SocioEmpresa> sociosEmpresa;
