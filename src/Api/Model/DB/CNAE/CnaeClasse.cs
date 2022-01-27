@@ -18,7 +18,9 @@ namespace CriadorBaseDados.Model.DB.CNAE
         public int ID { get; set; }
         [JsonProperty]
         public string Descricao { get; set; }
+        [Ignored]
         [JsonProperty]
+        public int CodGrupo => Grupo.ID;
         public CnaeGrupo Grupo { get; set; }
         [Backlink(nameof(CnaeSubclasse.Classe))]
         //[JsonProperty]

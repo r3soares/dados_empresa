@@ -16,7 +16,7 @@ namespace CriadorBaseDados.Model.DB
         [JsonProperty]
         public string Nome { get; set; }
         [Ignored]
-        [JsonProperty]
+        [JsonProperty("uf")]
         public string CodUF { get => UF.UF; }
         public Estado UF { get; set; }
         [Backlink(nameof(Empresa.Municipio))]

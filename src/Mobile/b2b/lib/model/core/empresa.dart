@@ -1,10 +1,5 @@
-import 'cnae/cnae_subclasse.dart';
 import 'contato.dart';
 import 'endereco.dart';
-import 'motivo_situacao.dart';
-import 'natureza_juridica.dart';
-import 'porte_empresa.dart';
-import 'situacao_cadastral.dart';
 import 'socio_empresa.dart';
 
 class Empresa {
@@ -12,16 +7,16 @@ class Empresa {
   final bool isMatriz;
   final String razaoSocial;
   final String nomeFantasia;
-  final SituacaoCadastral situacao;
-  final MotivoSituacao motivo;
+  final int codSituacao;
+  final int? codMotivo;
   final int dataSituacao;
-  final NaturezaJuridica naturezaJuridica;
+  final int? codNaturezaJuridica;
   final int dataInicioAtividade;
-  final CnaeSubclasse cnaeFiscal;
+  final int codCnaeFiscal;
   final Endereco endereco;
   final int municipio;
   final Contato contato;
-  final PorteEmpresa porte;
+  final int codPorte;
   final double capitalSocial;
   final List<SocioEmpresa> sociosEmpresa;
 
@@ -30,16 +25,16 @@ class Empresa {
       this.isMatriz,
       this.razaoSocial,
       this.nomeFantasia,
-      this.situacao,
-      this.motivo,
+      this.codSituacao,
+      this.codMotivo,
       this.dataSituacao,
-      this.naturezaJuridica,
+      this.codNaturezaJuridica,
       this.dataInicioAtividade,
-      this.cnaeFiscal,
+      this.codCnaeFiscal,
       this.endereco,
       this.municipio,
       this.contato,
-      this.porte,
+      this.codPorte,
       this.capitalSocial,
       this.sociosEmpresa);
 }

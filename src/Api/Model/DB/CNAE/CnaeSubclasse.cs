@@ -19,7 +19,9 @@ namespace CriadorBaseDados.Model.DB.CNAE
         [JsonProperty]
         [Indexed]
         public string Descricao { get; set; }
+        [Ignored]
         [JsonProperty]
+        public int CodClasse => Classe.ID;
         public CnaeClasse Classe { get; set; }
 
         //[JsonProperty]

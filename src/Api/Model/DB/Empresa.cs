@@ -40,7 +40,7 @@ namespace CriadorBaseDados.Model.DB
         public int DataInicioAtividade { get; set; }
         [Ignored]
         [JsonProperty]
-        public int CodCNAE_Fiscal { get => CNAE_Fiscal.ID; }
+        public int CodCnaeFiscal { get => CNAE_Fiscal.ID; }
         public CnaeSubclasse CNAE_Fiscal { get; set; }
         [JsonProperty]
         public Endereco Endereco { get; set; }

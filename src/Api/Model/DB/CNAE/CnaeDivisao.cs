@@ -18,7 +18,9 @@ namespace CriadorBaseDados.Model.DB.CNAE
         public int ID { get; set; }
         [JsonProperty]
         public string Descricao { get; set; }
+        [Ignored]
         [JsonProperty]
+        public string CodSecao => Secao.ID;
         public CnaeSecao Secao { get; set; }
         //[JsonProperty]
         [Backlink(nameof(CnaeGrupo.Divisao))]
