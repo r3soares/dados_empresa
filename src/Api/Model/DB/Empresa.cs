@@ -9,7 +9,7 @@ using System.Text;
 
 namespace CriadorBaseDados.Model.DB
 {
-    [JsonObject(MemberSerialization.OptIn)]
+    [JsonObject(MemberSerialization.OptIn, ItemNullValueHandling = NullValueHandling.Ignore)]
     public class Empresa : RealmObject
     {
         [JsonProperty]
@@ -27,13 +27,11 @@ namespace CriadorBaseDados.Model.DB
         public int CodSituacao { get => Situacao.Cod; }
         public SituacaoCadastral Situacao { get; set; }
         [Ignored]
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public int? CodMotivo { get => Motivo?.Cod; }
         public MotivoSituacao Motivo { get; set; }
         [JsonProperty]
         public int DataSituacao { get; set; }
         [Ignored]
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public int? CodNaturezaJuridica { get => NaturezaJuridica?.Cod; }
         public NaturezaJuridica NaturezaJuridica { get; set; }
         [JsonProperty]
@@ -48,7 +46,9 @@ namespace CriadorBaseDados.Model.DB
         [JsonProperty]
         public int CodMunicipio { get => Municipio.ID; }
         public Municipio Municipio { get; set; }
-        [JsonProperty]
+        [Ignored]
+        [JsonProperty("contato")]
+        public Contato? ContatoValido => Contato.Numeros.Any() || Contato.Email.Any() ? Contato : null;
         public Contato Contato { get; set; }
         [Ignored]
         [JsonProperty]
