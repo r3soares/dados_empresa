@@ -9,10 +9,10 @@ namespace CriadorBaseDados.Model.DB
     [JsonObject(MemberSerialization.OptIn)]
     public class Telefone : RealmObject
     {
-        [JsonProperty]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         [PrimaryKey]
         public string Numero { get; set; }
-        [JsonProperty]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public bool IsFax { get; set; }
     }
 }

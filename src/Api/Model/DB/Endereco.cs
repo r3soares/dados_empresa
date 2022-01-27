@@ -2,6 +2,7 @@
 using Realms;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace CriadorBaseDados.Model.DB
@@ -13,9 +14,11 @@ namespace CriadorBaseDados.Model.DB
         public string Logradouro { get; set; }
         [JsonProperty]
         public string Numero { get; set; }
-        [JsonProperty]
+        [DefaultValue("")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Complemento { get; set; }
-        [JsonProperty]
+        [DefaultValue("")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Bairro { get; set; }
         [JsonProperty]
         public string CEP { get; set; }
