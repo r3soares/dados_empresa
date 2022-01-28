@@ -9,7 +9,9 @@ namespace CriadorBaseDados.Model.DB
     [JsonObject(MemberSerialization.OptIn)]
     public class SocioEmpresa : RealmObject
     {
+        [Ignored]
         [JsonProperty]
+        public string CNPJSocio => Socio.CNPJ_CPF;
         public Socio Socio { get; set; }
         [Ignored]
         [JsonProperty]

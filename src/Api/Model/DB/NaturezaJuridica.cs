@@ -12,7 +12,9 @@ namespace CriadorBaseDados.Model.DB
         [JsonProperty]
         [PrimaryKey]
         public int Cod { get; set; }
+        [Ignored]
         [JsonProperty]
+        public int CodGrupo => Grupo.Cod;
         public GrupoNaturezaJuridica Grupo { get; set; }
         [JsonProperty]
         public string Descricao { get; set; }
