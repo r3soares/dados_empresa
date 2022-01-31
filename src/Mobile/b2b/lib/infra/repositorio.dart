@@ -1,61 +1,44 @@
 import 'package:b2b/domain/erros.dart';
 import 'package:b2b/domain/log.dart';
-import 'package:b2b/model/core/estado.dart';
-import 'package:b2b/model/core/municipio.dart';
+import 'package:b2b/model/core/json_serializable.dart';
 import 'package:b2b/utils/services/iDatabase.dart';
 
-class RepositoryTanque {
+class Repository<T> {
   final IDatabase db;
 
-  RepositoryTanque(this.db);
+  Repository(this.db);
 
-  Future<List<Municipio>> findMunicipiosByUF(String uf) async {
+  Future getAll() async {
     try {
-      var result = await db.find('uf', uf);
-      return result == false ? List.empty(growable: true) : (result as List).map((n) => Municipio.fromJson(n)).toList();
+      var result = await db.getAll();
+      return result == false
+          ? List.empty(growable: true)
+          : (result as List).map((n) => (T as JsonSerializable).fromJson(n)).toList();
     } on Falha catch (e) {
-      Log.message(this, 'Erro ao procurar empresa pelo uf $uf: ${e.msg}');
+      Log.message(this, 'Erro ao buscar tudo em ${T.runtimeType.toString()}: ${e.msg}');
       rethrow;
     }
   }
 
-  Future<List<Estado>> findTanquesByPlacaParcial(String placa) async {
+  Future get(dynamic id) async {
     try {
-      var result = await db.find('placaParcial', placa);
-      return result == false ? List.empty(growable: true) : (result as List).map((n) => Estado.fromJson(n)).toList();
+      var result = await db.getById(id);
+      var dado = result == false ? throw NaoEncontrado(id) : (T as JsonSerializable).fromJson(result);
+      return dado;
     } on Falha catch (e) {
-      Log.message(this, 'Erro ao procurar tanques pela placa parcial $placa: ${e.msg}');
+      Log.message(this, 'Erro ao procurar pelo id $id: ${e.msg}');
       rethrow;
     }
   }
 
-  Future<List<Estado>> findTanquesByInmetroParcial(String inmetro) async {
+  Future<List> getList(dynamic id) async {
     try {
-      var result = await db.find('inmetroParcial', inmetro);
-      return result == false ? List.empty(growable: true) : (result as List).map((n) => Estado.fromJson(n)).toList();
+      var result = await db.getById(id);
+      return result == false
+          ? List.empty(growable: true)
+          : (result as List).map((n) => (T as JsonSerializable).fromJson(n)).toList();
     } on Falha catch (e) {
-      Log.message(this, 'Erro ao procurar tanques pelo cod inmetro parcial $inmetro: ${e.msg}');
-      rethrow;
-    }
-  }
-
-  Future<List<Estado>> findTanquesByProprietario(String proprietario) async {
-    try {
-      var result = await db.find('proprietario', proprietario);
-      return result == false ? List.empty(growable: true) : (result as List).map((n) => Estado.fromJson(n)).toList();
-    } on Falha catch (e) {
-      Log.message(this, 'Erro ao procurar tanques pelo proprietário $proprietario: ${e.msg}');
-      rethrow;
-    }
-  }
-
-  Future<Estado> getTanque(String inmetro) async {
-    try {
-      var result = await db.getById(inmetro);
-      var tanque = result == false ? throw NaoEncontrado(inmetro) : Estado.fromJson(result);
-      return tanque;
-    } on Falha catch (e) {
-      Log.message(this, 'Erro ao procurar tanque $inmetro: ${e.msg}');
+      Log.message(this, 'Erro ao procurar pelo $id: ${e.msg}');
       rethrow;
     }
   }

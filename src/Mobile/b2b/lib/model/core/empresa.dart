@@ -1,3 +1,5 @@
+import 'package:b2b/model/core/json_serializable.dart';
+
 import 'contato.dart';
 import 'endereco.dart';
 import 'socio_empresa.dart';

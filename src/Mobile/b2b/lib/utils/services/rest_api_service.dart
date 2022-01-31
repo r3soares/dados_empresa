@@ -1,6 +1,6 @@
 //We do call the rest API to get, store data on a remote database for that we need to write the rest API call
-//at a single place and need to return the data if the rest call is a success or need to return custom error 
-//exception on the basis of 4xx, 5xx status code. 
+//at a single place and need to return the data if the rest call is a success or need to return custom error
+//exception on the basis of 4xx, 5xx status code.
 //We can make use of http package to make the rest API call in the flutter
 
 import 'dart:convert';
@@ -12,9 +12,8 @@ import 'package:http/http.dart' as http;
 
 import 'package:http/http.dart';
 
-
 class Api implements IDatabase {
-  final String endereco = 'https://10.50.46.41:45455/api/';
+  final String endereco = 'https://localhost:7131/v1/';
   final String controller;
   final headers = {
     'Content-Type': 'application/json',
