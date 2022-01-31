@@ -55,4 +55,26 @@ class Empresa {
         codPorte = json['codPorte'],
         capitalSocial = json['capitalSocial'] ?? 0,
         sociosEmpresa = json['sociosEmpresa'] ?? List.empty(growable: true);
+
+  Map<String, dynamic> toMap() {
+    var map = <String, dynamic>{
+      'cnpj': cnpj,
+      'isMatriz': isMatriz == true ? 1 : 0,
+      'razaoSocial': razaoSocial,
+      'nomeFantasia': nomeFantasia,
+      'codSituacao': codSituacao,
+      'codMotivo': codMotivo,
+      'dataSituacao': dataSituacao,
+      'codNaturezaJuridica': codNaturezaJuridica,
+      'dataInicioAtividade': dataInicioAtividade,
+      'codCnaeFiscal': codCnaeFiscal,
+      'endereco': endereco,
+      'codMunicipio': codMunicipio,
+      'contato': contato,
+      'codPorte': codPorte,
+      'capitalSocial': capitalSocial,
+      'sociosEmpresa': sociosEmpresa,
+    };
+    return map;
+  }
 }
