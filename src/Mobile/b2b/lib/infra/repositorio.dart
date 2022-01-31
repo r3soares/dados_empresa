@@ -1,8 +1,11 @@
 import 'package:b2b/domain/erros.dart';
 import 'package:b2b/domain/log.dart';
+import 'package:b2b/model/core/contato.dart';
+import 'package:b2b/model/core/empresa.dart';
+import 'package:b2b/model/core/endereco.dart';
 import 'package:b2b/model/core/estado.dart';
-import 'package:b2b/model/core/json_serializable.dart';
 import 'package:b2b/model/core/municipio.dart';
+import 'package:b2b/model/core/socio_empresa.dart';
 import 'package:b2b/utils/services/iDatabase.dart';
 
 class Repository {
@@ -13,9 +16,7 @@ class Repository {
   Future getAll<T>() async {
     try {
       var result = await db.getAll();
-      return result == false
-          ? List.empty(growable: true)
-          : (result as List).map((n) => (T as JsonSerializable).fromJson(n)).toList();
+      return result == false ? List.empty(growable: true) : (result as List).map((n) => _fromJson<T>(n)).toList();
     } on Falha catch (e) {
       Log.message(this, 'Erro ao buscar tudo em ${T.runtimeType.toString()}: ${e.msg}');
       rethrow;
@@ -52,6 +53,22 @@ class Repository {
       case Municipio:
         {
           return Municipio.fromJson(result);
+        }
+      case Empresa:
+        {
+          return Empresa.fromJson(result);
+        }
+      case SocioEmpresa:
+        {
+          return SocioEmpresa.fromJson(result);
+        }
+      case Contato:
+        {
+          return Contato.fromJson(result);
+        }
+      case Endereco:
+        {
+          return Endereco.fromJson(result);
         }
     }
   }

@@ -1,5 +1,3 @@
-import 'package:b2b/model/core/json_serializable.dart';
-
 import 'contato.dart';
 import 'endereco.dart';
 import 'socio_empresa.dart';
@@ -16,7 +14,7 @@ class Empresa {
   final int dataInicioAtividade;
   final int codCnaeFiscal;
   final Endereco endereco;
-  final int municipio;
+  final int codMunicipio;
   final Contato? contato;
   final int codPorte;
   final double capitalSocial;
@@ -34,9 +32,27 @@ class Empresa {
       this.dataInicioAtividade,
       this.codCnaeFiscal,
       this.endereco,
-      this.municipio,
+      this.codMunicipio,
       this.contato,
       this.codPorte,
       this.capitalSocial,
       this.sociosEmpresa);
+
+  Empresa.fromJson(Map<String, dynamic> json)
+      : cnpj = json['cnpj'],
+        isMatriz = json['isMatriz'] ?? false,
+        razaoSocial = json['razaoSocial'],
+        nomeFantasia = json['nomeFantasia'] ?? "",
+        codSituacao = json['codSituacao'],
+        codMotivo = json['codMotivo'],
+        dataSituacao = json['dataSituacao'],
+        codNaturezaJuridica = json['codNaturezaJuridica'],
+        dataInicioAtividade = json['dataInicioAtividade'],
+        codCnaeFiscal = json['codCnaeFiscal'],
+        endereco = Endereco.fromJson(json['endereco']),
+        codMunicipio = json['codMunicipio'],
+        contato = json['contato'] == null ? null : Contato.fromJson(json['contato']),
+        codPorte = json['codPorte'],
+        capitalSocial = json['capitalSocial'] ?? 0,
+        sociosEmpresa = json['sociosEmpresa'] ?? List.empty(growable: true);
 }

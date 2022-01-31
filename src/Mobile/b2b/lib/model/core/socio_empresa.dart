@@ -6,4 +6,11 @@ class SocioEmpresa {
   final double capital;
 
   SocioEmpresa(this.cnpjSocio, this.cnpjEmpresa, this.codQualificacao, this.dataEntrada, this.capital);
+
+  SocioEmpresa.fromJson(Map<String, dynamic> json)
+      : cnpjSocio = json['id'],
+        cnpjEmpresa = json['cnpjEmpresa'],
+        codQualificacao = json['codQualificacao'],
+        dataEntrada = json['dataEntrada'],
+        capital = json['capital'];
 }
