@@ -62,14 +62,14 @@ class Repository {
         {
           return SocioEmpresa.fromJson(result);
         }
-      case Contato:
-        {
-          return Contato.fromJson(result);
-        }
-      case Endereco:
-        {
-          return Endereco.fromJson(result);
-        }
+      // case Contato:
+      //   {
+      //     return Contato.fromJson(result);
+      //   }
+      // case Endereco:
+      //   {
+      //     return Endereco.fromJson(result);
+      //   }
     }
   }
 }

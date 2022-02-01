@@ -11,7 +11,7 @@ namespace CriadorBaseDados.Model.DB
     {
         [Ignored]
         [JsonProperty]
-        public string CNPJSocio => Socio.CNPJ_CPF;
+        public string CnpjSocio => Socio.CNPJ_CPF;
         public Socio Socio { get; set; }
         [Ignored]
         [JsonProperty]

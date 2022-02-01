@@ -3,7 +3,7 @@ abstract class IDatabase {
   getAll();
   find(instrucao, termo);
   find2(instrucao, termo);
-  save(String data);
-  update(String data);
+  save(data);
+  update(data);
   delete(id);
 }

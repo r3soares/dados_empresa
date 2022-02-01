@@ -8,7 +8,7 @@ class SocioEmpresa {
   SocioEmpresa(this.cnpjSocio, this.cnpjEmpresa, this.codQualificacao, this.dataEntrada, this.capital);
 
   SocioEmpresa.fromJson(Map<String, dynamic> json)
-      : cnpjSocio = json['id'],
+      : cnpjSocio = json['cnpjSocio'],
         cnpjEmpresa = json['cnpjEmpresa'],
         codQualificacao = json['codQualificacao'],
         dataEntrada = json['dataEntrada'],
