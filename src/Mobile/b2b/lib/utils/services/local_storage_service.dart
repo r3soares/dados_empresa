@@ -10,12 +10,11 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class Provider extends IDatabase {
   Database? _db;
-  final String createTable;
   final String tableName;
   final String columnId;
   static bool factoryIniciou = false;
 
-  Provider(this.createTable, this.tableName, this.columnId) {
+  Provider(this.tableName, this.columnId) {
     if (!factoryIniciou && Platform.isWindows || Platform.isLinux) {
       // Initialize FFI
       sqfliteFfiInit();
@@ -30,7 +29,9 @@ class Provider extends IDatabase {
     var path = await getDatabasesPath() + Constants.databaseName;
     try {
       _db = await openDatabase(path, version: 1, onCreate: (Database db, int version) async {
-        await db.execute(createTable);
+        for (var element in Constants.createTables) {
+          await db.execute(element);
+        }
       });
     } on Exception catch (e) {
       throw Falha('Erro ao abrir database: $e');

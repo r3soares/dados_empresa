@@ -2,7 +2,6 @@ import 'package:b2b/infra/providers.dart';
 import 'package:b2b/infra/repositorio.dart';
 import 'package:b2b/model/core/empresa.dart';
 import 'package:b2b/model/core/municipio.dart';
-import 'package:b2b/utils/services/local_storage_service.dart';
 import 'package:b2b/utils/services/rest_api_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -18,7 +17,7 @@ void main() {
     List municipios = List.empty();
     List empresas = List.empty();
     test('Consulta Municipios', () async {
-      municipios = await repoEstado.getList<Municipio>('SP') as List;
+      municipios = await repoEstado.getList<Municipio>('SP');
       expect(municipios.isNotEmpty, isTrue);
     }, timeout: const Timeout(Duration(minutes: 5)));
 
@@ -33,7 +32,7 @@ void main() {
     }, timeout: const Timeout(Duration(minutes: 5)));
 
     test('Salvando Empresas', () async {
-      var registros = await databaseMunicipio.saveAll(municipios);
+      var registros = await databaseEmpresa.saveAll(empresas);
       expect(empresas.isNotEmpty, isTrue);
     }, timeout: const Timeout(Duration(minutes: 5)));
   });
