@@ -179,6 +179,24 @@ class Api implements IDatabase {
     }
     throw Falha('Código de retorno não esperados: ${req.statusCode}');
   }
+
+  @override
+  close() {
+    // TODO: implement close
+    throw UnimplementedError();
+  }
+
+  @override
+  open(String path) {
+    // TODO: implement open
+    throw UnimplementedError();
+  }
+
+  @override
+  saveAll(data) {
+    // TODO: implement saveAll
+    throw UnimplementedError();
+  }
 }
 
 enum TipoRequest { Get, Post, Put, Delete }

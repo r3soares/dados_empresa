@@ -4,6 +4,7 @@ abstract class IDatabase {
   find(instrucao, termo);
   find2(instrucao, termo);
   save(data);
+  saveAll(data);
   update(data);
   delete(id);
 }

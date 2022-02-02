@@ -1,7 +1,3 @@
-import 'package:b2b/utils/services/local_storage_service.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:sqflite_common/sqlite_api.dart';
-
 import 'municipio.dart';
 
 class Estado {
@@ -12,11 +8,11 @@ class Estado {
 
   Estado.fromJson(Map<String, dynamic> json)
       : uf = json['uf'],
-        municipios = json['municipios'];
+        municipios = json['municipios'] ?? List.empty();
 
-  Estado.fromMap(Map<dynamic, dynamic> json)
-      : uf = json['uf'],
-        municipios = List.empty(growable: true);
+  // Estado.fromMap(Map<dynamic, dynamic> map)
+  //     : uf = map['uf'],
+  //       municipios = List.empty(growable: true);
 
   Map<String, dynamic> toMap() => <String, dynamic>{
         'uf': uf,

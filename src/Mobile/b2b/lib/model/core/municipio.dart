@@ -14,8 +14,14 @@ class Municipio {
         uf = json['uf'],
         empresas = json['empresas'] ?? List.empty(growable: true);
 
+  // Municipio.fromMap(Map<dynamic, dynamic> map)
+  //     : id = map['id'],
+  //       nome = map['nome'],
+  //       uf = map['uf'],
+  //       empresas = List.empty(growable: true);
+
   Map<String, dynamic> toMap() => <String, dynamic>{
-        'if': id,
+        'id': id,
         'nome': nome,
         'uf': uf,
         //'empresas': empresas,

@@ -1,8 +1,6 @@
 import 'package:b2b/domain/erros.dart';
 import 'package:b2b/domain/log.dart';
-import 'package:b2b/model/core/contato.dart';
 import 'package:b2b/model/core/empresa.dart';
-import 'package:b2b/model/core/endereco.dart';
 import 'package:b2b/model/core/estado.dart';
 import 'package:b2b/model/core/municipio.dart';
 import 'package:b2b/model/core/socio_empresa.dart';
@@ -23,7 +21,7 @@ class Repository {
     }
   }
 
-  Future get<T>(dynamic id) async {
+  Future get<T>(id) async {
     try {
       var result = await db.getById(id);
       var dado = result == false ? throw NaoEncontrado(id) : _fromJson<T>(result);
@@ -34,12 +32,35 @@ class Repository {
     }
   }
 
-  Future<List> getList<T>(dynamic id) async {
+  Future<List> getList<T>(id) async {
     try {
       var result = await db.getById(id);
       return result == false ? List.empty(growable: true) : (result as List).map((n) => _fromJson<T>(n)).toList();
     } on Falha catch (e) {
       Log.message(this, 'Erro ao procurar pelo $id: ${e.msg}');
+      rethrow;
+    }
+  }
+
+  Future<bool> save(value) async {
+    try {
+      bool salvou = (await db.save(value.toMap())) > 0;
+      if (!salvou) Log.message(this, 'Dado não foi salvo: $value');
+      return salvou;
+    } on Falha catch (e) {
+      Log.message(this, 'Erro ao salvar dado $value: ${e.msg}');
+      rethrow;
+    }
+  }
+
+  saveAll(List value) async {
+    try {
+      var lista = List.generate(value.length, (index) => value[index].toMap());
+      bool salvou = await db.saveAll(lista);
+      if (!salvou) Log.message(this, 'Dado não foi salvo: $value');
+      return salvou;
+    } on Falha catch (e) {
+      Log.message(this, 'Erro ao salvar dado $value: ${e.msg}');
       rethrow;
     }
   }
