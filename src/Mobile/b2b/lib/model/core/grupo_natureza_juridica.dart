@@ -13,4 +13,15 @@ class GrupoNaturezaJuridica {
   final List<NaturezaJuridica> lista;
 
   GrupoNaturezaJuridica(this.cod, this.descricao, this.lista);
+
+  GrupoNaturezaJuridica.fromJson(Map<String, dynamic> json)
+      : cod = json['cod'],
+        descricao = json['descricao'],
+        lista = json['lista'] ?? List.empty(growable: true);
+
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'cod': cod,
+        'descricao': descricao,
+        //'lista': lista,
+      };
 }

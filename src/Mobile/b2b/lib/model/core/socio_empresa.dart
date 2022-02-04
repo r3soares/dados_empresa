@@ -13,4 +13,12 @@ class SocioEmpresa {
         codQualificacao = json['codQualificacao'],
         dataEntrada = json['dataEntrada'],
         capital = json['capital'];
+
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'cnpjSocio': cnpjSocio,
+        'cnpjEmpresa': cnpjEmpresa,
+        'codQualificacao': codQualificacao,
+        'dataEntrada': dataEntrada,
+        'capital': capital,
+      };
 }

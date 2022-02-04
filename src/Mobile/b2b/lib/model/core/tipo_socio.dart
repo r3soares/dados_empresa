@@ -8,4 +8,13 @@ class TipoSocio {
   final String descricao;
 
   TipoSocio(this.cod, this.descricao);
+
+  TipoSocio.fromJson(Map<String, dynamic> json)
+      : cod = json['cod'],
+        descricao = json['descricao'];
+
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'cod': cod,
+        'descricao': descricao,
+      };
 }

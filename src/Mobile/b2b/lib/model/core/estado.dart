@@ -10,10 +10,6 @@ class Estado {
       : uf = json['uf'],
         municipios = json['municipios'] ?? List.empty();
 
-  // Estado.fromMap(Map<dynamic, dynamic> map)
-  //     : uf = map['uf'],
-  //       municipios = List.empty(growable: true);
-
   Map<String, dynamic> toMap() => <String, dynamic>{
         'uf': uf,
         //'municipios': municipios,

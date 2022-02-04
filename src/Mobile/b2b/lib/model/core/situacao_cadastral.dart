@@ -12,4 +12,13 @@ class SituacaoCadastral {
   final String descricao;
 
   SituacaoCadastral(this.cod, this.descricao);
+
+  SituacaoCadastral.fromJson(Map<String, dynamic> json)
+      : cod = json['cod'],
+        descricao = json['descricao'];
+
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'cod': cod,
+        'descricao': descricao,
+      };
 }
