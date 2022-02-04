@@ -13,6 +13,8 @@ void main() {
 
     var databaseMunicipio = Repository(MunicipioProvider());
     var databaseEmpresa = Repository(EmpresaProvider());
+    var databaseContato = Repository(ContatoProvider());
+    var databaseEndereco = Repository(EnderecoProvider());
 
     List municipios = List.empty();
     List empresas = List.empty();
@@ -28,12 +30,23 @@ void main() {
 
     test('Salvando Municipios', () async {
       var registros = await databaseMunicipio.saveAll(municipios);
-      expect(empresas.isNotEmpty, isTrue);
+      expect(registros, isTrue);
     }, timeout: const Timeout(Duration(minutes: 5)));
 
     test('Salvando Empresas', () async {
+      List contatos = List.empty(growable: true);
+      List enderecos = List.empty(growable: true);
+      for (int i = 0; i < empresas.length; i++) {
+        enderecos.add(empresas[i].endereco);
+        if (empresas[i].contato == null) continue;
+        contatos.add(empresas[i].contato);
+      }
       var registros = await databaseEmpresa.saveAll(empresas);
-      expect(empresas.isNotEmpty, isTrue);
+      var registros2 = await databaseContato.saveAll(contatos);
+      var registros3 = await databaseEndereco.saveAll(enderecos);
+      expect(registros, isTrue);
+      expect(registros2, isTrue);
+      expect(registros3, isTrue);
     }, timeout: const Timeout(Duration(minutes: 5)));
   });
 }
