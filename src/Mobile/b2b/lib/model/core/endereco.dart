@@ -14,4 +14,13 @@ class Endereco {
         complemento = json['complemento'] ?? "",
         bairro = json['bairro'],
         cep = json['cep'];
+
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'id': id,
+        'logradouro': logradouro,
+        'numero': numero,
+        'complemento': complemento,
+        'bairro': bairro,
+        'cep': cep,
+      };
 }
