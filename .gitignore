@@ -398,4 +398,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-src/Mobile/b2b/windows/*
+src/Mobile/b2b/windows/flutter/generated_plugin_registrant.cc
+src/Mobile/b2b/windows/flutter/generated_plugin_registrant.h
+src/Mobile/b2b/windows/flutter/generated_plugins.cmake
+src/Mobile/b2b/pubspec.lock
